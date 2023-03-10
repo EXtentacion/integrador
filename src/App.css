@@ -36,3 +36,28 @@
     transform: rotate(360deg);
   }
 }
+
+.form-group {
+  display: inline-block;
+  margin-right: 10px; /* Espacio entre elementos */
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+
+
+
+
+
+/* Path: src/index.css */
+
+
+
+/* Aministracion de usuarios */
+
+
