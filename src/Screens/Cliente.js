@@ -4,8 +4,13 @@ import  firebaseApp  from '../firebase/credenciales';
 import {getAuth,onAuthStateChanged, signOut} from "firebase/auth";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { faTicketAlt } from '@fortawesome/free-solid-svg-icons';
 import Comcliente from './Comcliente';
+import { v4 as uuidv4 } from 'uuid';
+import { Link } from 'react-router-dom';
+
+
 
 const auth = getAuth(firebaseApp);
 
@@ -64,26 +69,28 @@ function Cliente() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const autor = formData.AUTOR; // Guarda el valor actual de autor
-    setFormData({
+    const autor = formData.AUTOR;
+    const newFormData = {
       ...formData,
-      AUTOR: autor // Asigna el valor actual de autor a formData
-    });
-    axios.post('https://sheetdb.io/api/v1/g44unceikdnjr', formData)
+      ID: parseInt(uuidv4().replace(/\D/g, '')).toString().substring(0, 7),
+      AUTOR: autor
+    };
+    axios.post('https://sheetdb.io/api/v1/g44unceikdnjr', newFormData)
       .then(res => {
         console.log(res);
         console.log(res.data);
-        setTableData([...tableData, formData]);
+        setTableData([...tableData, newFormData]);
         setFormData({
-          ID: '',
           TICKETS: '',
-          AUTOR: autor, // Asigna el valor actual de autor a formData
+          AUTOR: autor,
           DEPARTAMENTO: '',
           FECHA: '',
-          DETALLES: ''
+          DETALLES: '',
         });
       })
   }
+
+  
   
   
   
@@ -103,6 +110,44 @@ function Cliente() {
           backgroundColor: "#f2f2f2",
         }}
       >
+        <FontAwesomeIcon
+          icon={faUser}
+          style={{
+            fontSize: "3rem",
+            color: "#0080ff",
+            marginLeft: "50px",
+          }}
+        />
+        <h1
+          style={{
+            marginLeft: "50px",
+          }}
+        >
+          {data1.map((row) => (
+            <div key={row.ID}>
+              {row.NOMBRE}
+            </div>
+          ))}
+        </h1>
+        <button
+          style={{
+            marginRight: "50px",
+            backgroundColor: "transparent",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          <Link
+            to="/config"
+            style={{
+              color: "#0080ff",
+              textDecoration: "none",
+            }}
+          >
+            Administracion de Perfil
+          </Link>
+        </button>
+
         <FontAwesomeIcon
           icon={faTicketAlt}
           style={{
@@ -132,7 +177,7 @@ function Cliente() {
           }
         >
           <FontAwesomeIcon
-            icon={faUser}
+            icon={faClose}
             style={{
               fontSize: "3rem",
               color: "#0080ff",
@@ -214,16 +259,7 @@ function Cliente() {
             {tableData.map((rowData, index) => (
               <tr key={index}>
                 <td>
-                  <input
-                    type="text"
-                    name="ID"
-                    value={rowData.ID}
-                    onChange={(e) => {
-                      const newData = [...tableData];
-                      newData[index].ID = e.target.value;
-                      setTableData(newData);
-                    }}
-                  />
+                  <input type="text" name="ID" value={rowData.ID} disabled />
                 </td>
                 <td>
                   <input
@@ -306,6 +342,7 @@ function Cliente() {
                   name="ID"
                   value={formData.ID}
                   onChange={handleChange}
+                  disabled
                 />
               </td>
               <td>
@@ -328,8 +365,8 @@ function Cliente() {
                 <select
                   name="DEPARTAMENTO"
                   value={formData.DEPARTAMENTO}
-                  onChange={handleChange} 
-                   style={{
+                  onChange={handleChange}
+                  style={{
                     width: "200px",
                     height: "30px",
                     borderRadius: "5px",
@@ -375,8 +412,7 @@ function Cliente() {
           alignItems: "center",
           marginTop: "30px",
         }}
-      >
-      </div>
+      ></div>
       <div
         style={{
           display: "flex",

@@ -18,10 +18,29 @@ function Departamentos() {
     setEditando(empleado);
   };
 
-  const handleGuardar = () => {
-    // Aquí podrías enviar los datos editados al servidor o hacer cualquier otra acción necesaria
-    setEditando({});
-  };
+  const handledGuradar = (num) => {
+    fetch(`https://sheetdb.io/api/v1/bb3a2w5pl600v/ID/${num}`, {
+      method: 'PATCH',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        data: {
+          ID: editando.ID,
+          NOMBRE: editando.NOMBRE,
+          DEPARTAMENTO: editando.DEPARTAMENTO,
+          OCUPACION: editando.OCUPACION
+        }
+      })
+    })
+    .then((response) => response.json())
+    .then((data) => alert(data));
+  }
+  
+
+
+    
 
   return (
     <div>
@@ -126,7 +145,7 @@ function Departamentos() {
                   <input
                     value={
                       editando.ID === empleado.ID
-                        ? editando.NOMBRE
+                        ? editando.NOMBRE 
                         : empleado.NOMBRE
                     }
                     disabled={editando.ID !== empleado.ID}
@@ -183,7 +202,7 @@ function Departamentos() {
                         cursor: "pointer",
                         color: "green",
                       }}
-                      onClick={handleGuardar}
+                      onClick={() => handledGuradar(empleado.ID)}
                     />
                   ) : (
                     <FontAwesomeIcon

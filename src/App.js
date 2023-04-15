@@ -12,6 +12,7 @@ import Departamentos from "./Screens/Departamentos";
 import Administracion from "./Screens/Administracion";
 import Comentarios from "./Screens/Comentarios";
 import Reportes from "./Screens/Reportes";
+import Config from "./Screens/Config";
 
 const auth = getAuth(firebaseApp);
 const firestore = getFirestore(firebaseApp);
@@ -63,6 +64,7 @@ function App() {
         <Route path="/departamentos" element={<Departamentos/>} />
         <Route path="/comentarios" element={<Comentarios/>} />
         <Route path="/reportes" element={<Reportes/>}/>
+        <Route path="/config" element={<Config/>}/>
       </Routes>
     </BrowserRouter>
   );

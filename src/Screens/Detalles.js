@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+
+
 
 function Detalles() {
   const [data, setData] = useState([{ ID: '', NOMBRE: '', DEPARTAMENTO: '', OCUPACION: '' }]);
 
   const handleAddRow = () => {
-    setData([...data, { id: '', nombre: '', departamento: '', ocupacion: '' }]);
+    const newRow = { ID: uuidv4(), NOMBRE: '', DEPARTAMENTO: '', OCUPACION: '' };
+    setData([...data, newRow]);
   };
+  
+  
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
@@ -15,12 +21,13 @@ function Detalles() {
   };  
 
   const handleSubmit = () => {
-    fetch('https://sheetdb.io/api/v1/bb3a2w5pl600v', {
-      method: 'POST',
+    const dataToSend = data.map(({ ID, ...rest }) => rest); // Eliminar campo ID
+    fetch('https://sheetdb.io/api/v1/bb3a2w5pl600v/ID', {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(dataToSend)
     })
     .then(response => response.json())
     .then(data => {
@@ -33,6 +40,8 @@ function Detalles() {
       return alert('Error al guardar los datos');
     });
   };
+  
+  
 
   return (
     <div>

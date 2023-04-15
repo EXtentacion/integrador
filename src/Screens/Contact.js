@@ -40,7 +40,10 @@ export const Contact = () => {
       setDoc(docuRef, {
         correo: email,
         rol: rol,
-        Nombre: name
+        Nombre: name,
+        telefono: null,
+        genero: null,
+        foto: null,
       });
 
     }

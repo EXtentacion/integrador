@@ -26,7 +26,7 @@
     const [id, setId] = useState("");
     const [editingRow, setEditingRow] = useState(null);
     const [ticket, setTicket] = useState(null)
-    const [showTicket, setShowTicket] = useState(false);
+    const [showTicket, setShowTicket] = useState(true);
     const [num, setNum] = useState('');
     const [comentario, setComentario] = useState('');
 
