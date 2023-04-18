@@ -248,7 +248,7 @@ function Config() {
             }
           />
           <label htmlFor="genero">Genero:</label>
-          <select
+          <input
             style={{
               textAlign: "center",
               width: "300px",
@@ -257,6 +257,7 @@ function Config() {
               border: "1px solid #ccc",
               padding: "0 10px",
             }}
+            type="text"
             id="genero"
             defaultValue={searchedUser.genero}
             onChange={(event) =>
@@ -265,12 +266,7 @@ function Config() {
                 genero: event.target.value,
               }))
             }
-          >
-            <option value={null}>-----------</option>
-            <option value="Masculino">Masculino</option>
-            <option value="Femenino">Femenino</option>
-            <option value="Otro">Otro</option>
-          </select>
+          />
           <label htmlFor="telefono">Telefono:</label>
           <input
             style={{
