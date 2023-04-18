@@ -4,16 +4,20 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { faBuilding } from '@fortawesome/free-solid-svg-icons';
 import { faEdit, faSave } from '@fortawesome/free-solid-svg-icons';
 
+
+
+
 function Departamentos() {
+
   const [empleados, setEmpleados] = useState([]);
   const [editando, setEditando] = useState({});
-
+  
   useEffect(() => {
     fetch('https://sheetdb.io/api/v1/bb3a2w5pl600v')
       .then(response => response.json())
       .then(data => setEmpleados(data));
   }, []);
-
+  
   const handleEditar = (empleado) => {
     setEditando(empleado);
   };
@@ -37,10 +41,6 @@ function Departamentos() {
     .then((response) => response.json())
     .then((data) => alert(data));
   }
-  
-
-
-    
 
   return (
     <div>
@@ -224,6 +224,7 @@ function Departamentos() {
       </div>
     </div>
   );
+
 }
 
 export default Departamentos;
