@@ -54,7 +54,7 @@
         })
       })
       .then((response) => response.json())
-      .then((data) => console.log(data));
+      .then(alert("Se ha actualizado el ticket"));
     }
     
     
@@ -389,75 +389,6 @@
                       border: "none",
                       borderRadius: "5px",
                     }}
-                    
-                  >
-                    Actualizar
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <h3 style={{
-            color: "#0080ff",
-            marginTop: "50px",
-          }}>COMENTARIOS A CLIENTES</h3>
-          <table>
-            <thead
-              style={{
-                backgroundColor: "#0080ff",
-                color: "#fff",
-              }}
-            >
-              <tr>
-                {/* ... */}
-                <th>ID</th>
-                <th>COMENTARIO</th>
-
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                {/* ... */}
-                <td>
-                  <input
-                    type="text"
-                    value={num}
-                    onChange={(e) => setNum(e.target.value)}
-                    placeholder="ID"
-                    style={{
-                      width: "100px",
-                      height: "100px",
-                      textAlign: "center",
-                    }}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    value={comentario}
-                    onChange={(e) => setComentario(e.target.value)}
-                    placeholder="Comentario"
-                    style={{
-                      width: "250px",
-                      height: "100px",
-                      textAlign: "center",
-                    }}
-                  />
-                </td>
-                <td>
-                  <button
-                    onClick={() => {
-                      updateName(num);
-                    }}
-                    style={{
-                      width: "200px",
-                      height: "100px",
-                      backgroundColor: "#000",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "5px",
-                    }}
-
                   >
                     Actualizar
                   </button>

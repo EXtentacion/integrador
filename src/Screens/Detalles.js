@@ -21,25 +21,26 @@ function Detalles() {
   };  
 
   const handleSubmit = () => {
-    const dataToSend = data.map(({ ID, ...rest }) => rest); // Eliminar campo ID
-    fetch('https://sheetdb.io/api/v1/bb3a2w5pl600v/ID', {
-      method: 'PUT',
+    const dataToSend = data.map((item) => {
+      return {
+        ID: item.ID,
+        NOMBRE: item.NOMBRE,
+        DEPARTAMENTO: item.DEPARTAMENTO,
+        OCUPACION: item.OCUPACION
+      };
+    });
+    fetch('https://sheetdb.io/api/v1/bb3a2w5pl600v', {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(dataToSend)
     })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      setData([{ ID: '', NOMBRE: '', DEPARTAMENTO: '', OCUPACION: '' }]);
-      return alert('Datos guardados');
-    })
-    .catch(error => {
-      console.error(error);
-      return alert('Error al guardar los datos');
-    });
+    .then((response) => response.json())
+    .then((data) => alert(data));
   };
+
+
   
   
 

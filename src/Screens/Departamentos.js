@@ -2,28 +2,35 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { faBuilding } from '@fortawesome/free-solid-svg-icons';
-import { faEdit, faSave } from '@fortawesome/free-solid-svg-icons';
-
-
-
+import { faEdit, faSave, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 function Departamentos() {
-
   const [empleados, setEmpleados] = useState([]);
   const [editando, setEditando] = useState({});
   
   useEffect(() => {
     fetch('https://sheetdb.io/api/v1/bb3a2w5pl600v')
       .then(response => response.json())
-      .then(data => setEmpleados(data));
+      .then(data => {
+        setEmpleados(data);
+      });
   }, []);
+  
+  
   
   const handleEditar = (empleado) => {
     setEditando(empleado);
   };
 
+  const handleChange = (campo, valor) => {
+    setEditando({
+      ...editando,
+      [campo]: valor
+    });
+  }
+
   const handledGuradar = (num) => {
-    fetch(`https://sheetdb.io/api/v1/bb3a2w5pl600v/ID/${num}`, {
+    fetch(`https://sheetdb.io/api/v1/bb3a2w5pl600v/NOMBRE/${num}`, {
       method: 'PATCH',
       headers: {
         'Accept': 'application/json',
@@ -42,180 +49,126 @@ function Departamentos() {
     .then((data) => alert(data));
   }
 
+
+
+  const handleAgregarFila = () => {
+    const nuevoEmpleado = {
+      ID: '',
+      NOMBRE: '',
+      DEPARTAMENTO: '',
+      OCUPACION: ''
+    };
+    setEmpleados([...empleados, nuevoEmpleado]);
+  };
+
+  const handleEliminar = (num) => {
+    fetch(`https://sheetdb.io/api/v1/bb3a2w5pl600v/NOMBRE/${num}`, {
+      method: 'DELETE'
+    })
+    .then((response) => response.json())
+    .then((data) => alert(data));
+  }
+
+  const handleSubmit = () => {
+    const dataToSend = empleados.map(({ ID, ...rest }) => rest); // Eliminar campo ID
+    fetch('https://sheetdb.io/api/v1/bb3a2w5pl600v', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(dataToSend)
+    })
+    .then((response) => response.json())
+    .then((data) => alert(data));
+  };
+
+
+
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          backgroundColor: "#0080ff", //color verde en rgba  (0, 255, 0, 0.5)
-          color: "white",
-          alignItems: "center",
-          borderRadius: "10px",
-          padding: "10px",
-          margin: "10px",
-        }}
-      >
-        <FontAwesomeIcon
-          icon={faInfoCircle}
-          style={{
-            fontSize: "50px",
-            marginLeft: "10px",
-          }}
-        />
-        <h1
-          style={{
-            marginLeft: "10px",
-          }}
-        >
-          DEPARTAMENTOS
-        </h1>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          marginTop: "100px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "rgba(0, 0, 255, 0.5)",
-            borderRadius: "50%",
-            width: "150px",
-            height: "150px",
-          }}
-        >
-          <FontAwesomeIcon
-            icon={faBuilding}
-            style={{
-              fontSize: "50px",
-              color: "white",
-            }}
-          />
-        </div>
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          width: "100%",
-          marginTop: "100px",
-        }}
-      >
-        <table>
-          <thead
-            style={{
-              backgroundColor: "rgba(255, 0, 0, 0.5)",
-              color: "white",
-            }}
-          >
+      <div style={{    
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(255, 255, 0, 0.5)',
+      }}>
+        <table style={{
+          border: '1px solid black',
+          backdropFilter: 'blur(10px)',
+          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+          borderRadius: '10px',
+          padding: '10px',
+          margin: '10px',
+        }}>
+          <thead>
             <tr>
               <th>ID</th>
               <th>NOMBRE</th>
               <th>DEPARTAMENTO</th>
               <th>OCUPACION</th>
-              <th></th>
+              <th>ACCIONES</th>
             </tr>
           </thead>
           <tbody>
             {empleados.map((empleado) => (
-              <tr key={empleado.id}>
+              <tr key={empleado.ID}>
                 <td>
-                  <input
-                    value={
-                      editando.ID === empleado.ID ? editando.ID : empleado.ID
-                    }
-                    disabled={editando.ID !== empleado.ID}
-                    style={{
-                      width: "300px",
-                      height: "30px",
-                    }}
-                    onChange={(e) =>
-                      setEditando({ ...editando, ID: e.target.value })
-                    }
-                  />
-                </td>
-                <td>
-                  <input
-                    value={
-                      editando.ID === empleado.ID
-                        ? editando.NOMBRE 
-                        : empleado.NOMBRE
-                    }
-                    disabled={editando.ID !== empleado.ID}
-                    style={{
-                      width: "300px",
-                      height: "30px",
-                    }}
-                    onChange={(e) =>
-                      setEditando({ ...editando, NOMBRE: e.target.value })
-                    }
-                  />
-                </td>
-                <td>
-                  <input
-                    value={
-                      editando.ID === empleado.ID
-                        ? editando.DEPARTAMENTO
-                        : empleado.DEPARTAMENTO
-                    }
-                    disabled={editando.ID !== empleado.ID}
-                    style={{
-                      width: "300px",
-                      height: "30px",
-                    }}
-                    onChange={(e) =>
-                      setEditando({ ...editando, DEPARTAMENTO: e.target.value })
-                    }
-                  />
-                </td>
-                <td>
-                  <input
-                    value={
-                      editando.ID === empleado.ID
-                        ? editando.OCUPACION
-                        : empleado.OCUPACION
-                    }
-                    disabled={editando.ID !== empleado.ID}
-                    style={{
-                      width: "300px",
-                      height: "30px",
-                    }}
-                    onChange={(e) =>
-                      setEditando({ ...editando, OCUPACION: e.target.value })
-                    }
-                  />
+                  {editando.ID === empleado.ID ? (
+                    <input
+                      type="text"
+                      value={editando.ID}
+                      onChange={(e) => handleChange('ID', e.target.value)}
+                    />
+                  ) : (
+                    empleado.ID
+                  )}
                 </td>
                 <td>
                   {editando.ID === empleado.ID ? (
-                    <FontAwesomeIcon
-                      icon={faSave}
-                      style={{
-                        fontSize: "30px",
-                        marginLeft: "10px",
-                        cursor: "pointer",
-                        color: "green",
-                      }}
-                      onClick={() => handledGuradar(empleado.ID)}
+                    <input
+                      type="text"
+                      value={editando.NOMBRE}
+                      onChange={(e) => handleChange('NOMBRE', e.target.value)}
                     />
                   ) : (
-                    <FontAwesomeIcon
-                      icon={faEdit}
-                      style={{
-                        fontSize: "30px",
-                        marginLeft: "10px",
-                        cursor: "pointer",
-                        color: "blue",
-                      }}
-                      onClick={() => handleEditar(empleado)}
-                    />
+                    empleado.NOMBRE
                   )}
+                </td>
+                <td>
+                  {editando.ID === empleado.ID ? (
+                    <input
+                      type="text"
+                      value={editando.DEPARTAMENTO}
+                      onChange={(e) => handleChange('DEPARTAMENTO', e.target.value)}
+                    />
+                  ) : (
+                    empleado.DEPARTAMENTO
+                  )}
+                </td>
+                <td>
+                  {editando.ID === empleado.ID ? (
+                    <input
+                      type="text"
+                      value={editando.OCUPACION}
+                      onChange={(e) => handleChange('OCUPACION', e.target.value)}
+                    />
+                  ) : (
+                    empleado.OCUPACION
+                  )}
+                </td>
+                <td>
+                  {editando.ID === empleado.ID ? (
+                    <button onClick={() => handledGuradar(empleado.NOMBRE)}>
+                      <FontAwesomeIcon icon={faSave} />
+                    </button>
+                  ) : ( 
+                    <button onClick={() => handleEditar(empleado)}>
+                      <FontAwesomeIcon icon={faEdit} />
+                    </button>
+                  )}
+                  <button onClick={() => handleEliminar(empleado.NOMBRE)}>
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
                 </td>
               </tr>
             ))}
@@ -224,7 +177,7 @@ function Departamentos() {
       </div>
     </div>
   );
-
 }
 
 export default Departamentos;
+   
